@@ -135,4 +135,15 @@ public class MascotaDAO implements IMascotaDAO {
             throw new DaoException("Error al hacer el join.", ex);
         }
     }
+    
+    public List<Document> findByNameAndType()throws DaoException{
+        try{
+            List<Document> pipeline = List.of(
+                    new Document("$project", new Document("_id", 0).append("nombre", 1).append("tipo", 1))
+            );
+            return colDoc.aggregate(pipeline).into(new ArrayList<>());
+        }catch(Exception ex){
+            throw new DaoException("Error al hacer el join.", ex);
+        }
+    }
 }
