@@ -123,4 +123,16 @@ public class MascotaDAO implements IMascotaDAO {
             throw new DaoException("Error al hacer el join.", ex);
         }
     }
+    
+    public List<Mascota> findByTipoAndSorted(String tipo) throws DaoException{
+        try{
+            List<Document> pipeline = List.of(
+                    new Document("$match", new Document("tipo", tipo)),
+                    new Document("$sort", new Document("nombre", 1))
+            );
+            return col.aggregate(pipeline).into(new ArrayList<>());
+        }catch(Exception ex){
+            throw new DaoException("Error al hacer el join.", ex);
+        }
+    }
 }
