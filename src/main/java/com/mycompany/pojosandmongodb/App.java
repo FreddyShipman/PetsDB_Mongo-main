@@ -9,6 +9,7 @@ import com.mycompany.pojosandmongodb.exception.EntityNotFoundException;
 import com.mycompany.pojosandmongodb.model.Direccion;
 import com.mycompany.pojosandmongodb.model.Usuario;
 import com.mycompany.pojosandmongodb.repository.IUsuarioDAO;
+import com.mycompany.pojosandmongodb.repository.MascotaDAO;
 import com.mycompany.pojosandmongodb.repository.UsuarioDAO;
 import java.time.Instant;
 import java.util.List;
@@ -27,12 +28,16 @@ public class App {
         // Usa el DAO
         IUsuarioDAO dao = new UsuarioDAO();
         
-//        try{
-//
-//        } catch (EntityNotFoundException e) {
-//            System.err.println("No encontrado: " + e.getMessage());
-//        } catch (DaoException e) {
-//            System.err.println("Error DAO: " + e.getMessage());
-//        }
+        MascotaDAO mascotaDAO = new MascotaDAO();
+        
+        try{    
+            mascotaDAO.findByNameAndType()
+                .forEach(doc -> System.out.println(doc.toJson()));
+
+        } catch (EntityNotFoundException e) {
+            System.err.println("No encontrado: " + e.getMessage());
+        } catch (DaoException e) {
+            System.err.println("Error DAO: " + e.getMessage());
+        }
     }
 }
