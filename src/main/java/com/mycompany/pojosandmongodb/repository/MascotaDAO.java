@@ -146,4 +146,17 @@ public class MascotaDAO implements IMascotaDAO {
             throw new DaoException("Error al hacer el join.", ex);
         }
     }
+    
+    public List<Mascota> paginar (int page, int size) throws DaoException{
+        try{
+            List<Document> pipeline = List.of(
+                    new Document("$sort", new Document("creado_en", -1)),
+                    new Document("$skip", page),
+                    new Document("$limit", size)
+            );
+            return col.aggregate(pipeline).into(new ArrayList<>());
+        }catch(Exception ex){
+            throw new DaoException("Error al hacer el join.", ex);
+        }
+    }
 }
