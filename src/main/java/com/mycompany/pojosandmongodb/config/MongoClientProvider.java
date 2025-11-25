@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.pojosandmongodb.config;
 
 import com.mongodb.client.MongoClient;
@@ -30,7 +26,7 @@ public enum MongoClientProvider {
     // ==============================
     private MongoClient client;            // Objeto principal de conexión a MongoDB
     private String dbName = "PetsDB";  // Nombre de la base de datos
-    private String uri = "tu-url-de-conexion"; // URI o cadena de conexión a MongoDB
+    private String uri = "mongodb://localhost:27017/"; // URI o cadena de conexión a MongoDB
 
     // ==============================
     // Inicialización del cliente

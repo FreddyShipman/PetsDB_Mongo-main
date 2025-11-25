@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.pojosandmongodb.repository;
 
 import com.mongodb.MongoException;
@@ -16,6 +12,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 
 /**
@@ -24,9 +21,11 @@ import org.bson.types.ObjectId;
  */
 public class MascotaDAO implements IMascotaDAO {
      private final MongoCollection<Mascota> col;
+     private final MongoCollection<Document> colDoc;
 
     public MascotaDAO() {
         this.col = MongoClientProvider.INSTANCE.getCollection("mascotas", Mascota.class);
+        this.colDoc = MongoClientProvider.INSTANCE.getCollection("mascotas", Document.class);
     }
 
     @Override
@@ -105,6 +104,23 @@ public class MascotaDAO implements IMascotaDAO {
             return Optional.ofNullable(col.find(Filters.eq("nombre", nombre)).first());
         } catch (MongoException e) {
             throw new DaoException("Error consultando mascota por nombre", e);
+        }
+    }
+    
+    public List<Document> findMascotaWithUser() throws DaoException{
+        try{
+            List<Document> pipeline = List.of(
+                    new Document("$lookup",
+                        new Document("from", "usuarios")
+                            .append("localField", "persona_id")
+                            .append("foreingField", "_id")
+                            .append("as", "duenio")
+                    ),
+                    new Document("$unwind", "$duenio")
+            );
+            return colDoc.aggregate(pipeline).into(new ArrayList<>());
+        }catch(Exception ex){
+            throw new DaoException("Error al hacer el join.", ex);
         }
     }
 }
