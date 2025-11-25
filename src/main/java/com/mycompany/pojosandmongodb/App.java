@@ -31,9 +31,11 @@ public class App {
         MascotaDAO mascotaDAO = new MascotaDAO();
         
         try{    
+            mascotaDAO.findByTipoAndSorted("Perro")
+                .forEach(System.out::println);
+            
             mascotaDAO.findByNameAndType()
                 .forEach(doc -> System.out.println(doc.toJson()));
-
         } catch (EntityNotFoundException e) {
             System.err.println("No encontrado: " + e.getMessage());
         } catch (DaoException e) {
